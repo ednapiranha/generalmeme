@@ -50,11 +50,12 @@ module.exports = function (app, nconf, isLoggedIn) {
                       'Authorization': 'Bearer ' + req.session.passport.user.access_token
                     },
                     qs: {
-                      'content': s3.url(filename),
-                      'type': 'com.sample.test'
+                      content: s3.url(filename)
+                    },
+                    json: {
+                      type: 'photo'
                     }
                   }, function (err, resp, body) {
-                    console.log(body);
                     res.redirect('/meme/' + encodeURIComponent(p.url));
                     db.close();
                   });
