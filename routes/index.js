@@ -47,8 +47,7 @@ module.exports = function (app, nconf, isLoggedIn) {
                   request.post({
                     url: 'https://alpha-api.app.net/stream/0/files',
                     headers: {
-                      'Authorization': 'Bearer ' + req.session.passport.user.access_token,
-                      'Content-Disposition': 'form-data; name="type"'
+                      'Authorization': 'Bearer ' + req.session.passport.user.access_token
                     },
                     qs: {
                       'content': s3.url(filename),
@@ -59,6 +58,9 @@ module.exports = function (app, nconf, isLoggedIn) {
                     res.redirect('/meme/' + encodeURIComponent(p.url));
                     db.close();
                   });
+                } else {
+                  res.redirect('/meme/' + encodeURIComponent(p.url));
+                  db.close();
                 }
               });
             });
