@@ -1,0 +1,6 @@
+.DS_Store
+node_modules
+local.json
+public/javascripts/build
+public/stylesheets/main-min.css
+db

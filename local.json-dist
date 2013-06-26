@@ -1,0 +1,17 @@
+{
+    "domain": "http://localhost",
+    "port": 3000,
+    "authPort": 3000,
+    "authUrl": "https://login.persona.org",
+    "session_secret": "secret",
+    "appnet_consumer_key": "appnet_key",
+    "appnet_consumer_secret": "appnet_secret",
+    "db": "./db",
+    "debug": true,
+    "s3_key": "your s3 key",
+    "s3_secret": "your s3 secret",
+    "s3_bucket": "your bucket",
+    "analytics": "you google analytics value",
+    "analyticsHost": "your domain without the protocol (e.g. someurl.com)",
+    "redis_db": 0
+}
