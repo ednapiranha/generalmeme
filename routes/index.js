@@ -27,7 +27,7 @@ module.exports = function (app, nconf, isLoggedIn) {
     var uid = uuid.v1();
     var filename = 'meme-' + uid + '.' + req.body.fileType;
 
-    s3.putBuffer(buffer, filename, headers, function (err, res) {
+    s3.putBuffer(buffer, filename, headers, function (err) {
       if (err) {
         res.status(500);
         next(err);
@@ -42,9 +42,24 @@ module.exports = function (app, nconf, isLoggedIn) {
               url: s3.url(filename)
             }, function () {
               db.get('meme_' + uid, function (e, p) {
-                res.redirect('/meme/' + p.url, function () {
-                  db.close();
-                });
+                if (req.session.loginType === 'appdotnet') {
+                  // use app.net's file api
+                  request.post({
+                    url: 'https://alpha-api.app.net/stream/0/files',
+                    headers: {
+                      'Authorization': 'Bearer ' + req.session.passport.user.access_token,
+                      'Content-Disposition': 'form-data; name="type"'
+                    },
+                    qs: {
+                      'content': s3.url(filename),
+                      'type': 'com.sample.test'
+                    }
+                  }, function (err, resp, body) {
+                    console.log(body);
+                    res.redirect('/meme/' + encodeURIComponent(p.url));
+                    db.close();
+                  });
+                }
               });
             });
           } else {
@@ -53,10 +68,9 @@ module.exports = function (app, nconf, isLoggedIn) {
         });
       }
     });
+  });
 
-    if (req.session.loginType === 'appdotnet') {
-      // use app.net's file api
-
-    }
+  app.get('/meme/:url', function (req, res, next) {
+    res.render('meme', { url: req.params.url });
   });
 };
