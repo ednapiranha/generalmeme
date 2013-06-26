@@ -71,9 +71,8 @@ define(['jquery', 'moment', 'memerator'],
   });
 
   body.on('submit', function (ev) {
-    ev.preventDefault();
-
-    file.val(meme.image.src);
+    body.find('.file-type').val('png');
+    file.val(meme.canvas.toDataURL().replace(/data:image\/png;base64/, ''));
   });
 
   body.on('click', function (ev) {
