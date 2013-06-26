@@ -1,9 +1,19 @@
-define(['jquery', 'moment'],
-  function ($, moment) {
+define(['jquery', 'moment', 'memerator'],
+  function ($, moment, Memerator) {
   'use strict';
 
   var body = $('body');
+  var input = $('.text-input');
+  var file = $('.file-input');
   var currentUser = localStorage.getItem('personaEmail');
+
+  var canvas = document.createElement('canvas');
+  canvas.id = 'canvas';
+  canvas.width = canvas.height = 500;
+
+  document.body.appendChild(canvas);
+
+  var meme = new Memerator();
 
   navigator.id.watch({
     loggedInUser: currentUser,
@@ -36,6 +46,34 @@ define(['jquery', 'moment'],
         }
       });
     }
+  });
+
+  body.on('change', 'input[type="file"]', function (ev) {
+    var files = ev.target.files;
+    var file;
+
+    if (files && files.length > 0) {
+      file = files[0];
+
+      var fileReader = new FileReader();
+
+      fileReader.onload = function (evt) {
+        meme.image.src = evt.target.result;
+        meme.generate();
+      };
+
+      fileReader.readAsDataURL(file);
+    }
+  });
+
+  input.on('keyup', function () {
+    meme.updateText($(this).val());
+  });
+
+  body.on('submit', function (ev) {
+    ev.preventDefault();
+
+    file.val(meme.image.src);
   });
 
   body.on('click', function (ev) {

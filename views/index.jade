@@ -1,4 +1,12 @@
 extend layout
 
 block content
-  p test
+  if session
+    form(method='post', action='/add')
+      input(type='file', id='photo-file', accept='image/*', required)
+      input(type='text', name='text', class='text-input', required)
+      input(type='text', name='photo', class='file-input')
+      button(type='submit') Upload!
+  else
+    a(href='/auth/appdotnet', class='login') Sign in with App.net
+    a(href='javascript:;', data-action='login', class='login') Sign in with Persona

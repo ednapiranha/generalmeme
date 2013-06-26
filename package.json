@@ -16,7 +16,9 @@
     "passport": ">= 0.1.17",
     "passport-appdotnet": ">= 0.1.1",
     "connect-redis": ">= 1.4.5",
-    "levelup": ">= 0.10.0"
+    "levelup": ">= 0.10.0",
+    "knox": ">= 0.8.0",
+    "knox-mpu": ">= 0.1.0"
   },
   "devDependencies": {
     "grunt": ">= 0.4.x",

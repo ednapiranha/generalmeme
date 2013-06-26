@@ -46,3 +46,76 @@ table {
     border-collapse: collapse;
     border-spacing: 0;
 }
+
+@font-face {
+    font-family: 'Bebas';
+    src: url('../fonts/BEBAS___-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    font-family: 'Bebas', sans-serif;
+    position: relative;
+    text-align: center;
+    word-spacing: 2px;
+}
+
+h1 {
+    color: #62baf2;
+    font-size: 40px;
+    line-height: 50px;
+    margin-bottom: 20px;
+}
+
+header {
+    margin: 20px 0;
+}
+
+.login {
+    color: #9fdf24;
+    display: inline-block;
+    font-size: 20px;
+    height: 30px;
+    margin: 5px;
+    padding: 5px 10px;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.login:hover, .logout:hover {
+    font-size: 30px;
+    transition: 0.5s ease-in-out;
+}
+
+.logout {
+    color: #222;
+    font-size: 20px;
+    position: absolute;
+    right: 10px;
+    text-decoration: none;
+    top: 0;
+}
+
+form {
+    display: block;
+    margin: 0 auto;
+    padding: 20px 0;
+    text-align: center;
+    width: 500px;
+}
+
+input {
+    clear: both;
+    display: block;
+    margin: 15px 0;
+    width: 100%;
+}
+
+input[type="text"] {
+    font-size: 15px;
+}
+
+.hidden {
+    display: none;
+}
