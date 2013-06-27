@@ -58,6 +58,7 @@ define(['jquery', 'moment', 'memerator'],
       var fileReader = new FileReader();
 
       fileReader.onload = function (evt) {
+        body.find('#canvas-block').removeClass('hidden');
         meme.image.src = evt.target.result;
         meme.generate();
       };
