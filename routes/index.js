@@ -21,6 +21,7 @@ module.exports = function (app, nconf, isLoggedIn) {
           reverse: true
         }).on('data', function (data) {
           memes.push({
+            key: data.key,
             url: data.value.url,
             encoded: encodeURIComponent(data.value.url)
           });
@@ -28,6 +29,9 @@ module.exports = function (app, nconf, isLoggedIn) {
           res.status(500);
           next(err);
         }).on('end', function () {
+          memes = memes.sort(function (a, b) {
+            return a.key - b.key;
+          });
           res.render('index', { memes: memes });
           db.close();
         });
