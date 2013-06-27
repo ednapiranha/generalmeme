@@ -1,0 +1,12 @@
+extend layout
+
+block content
+  form(method='post', action='/add')
+    h2 1. Choose a file
+    input(type='file', id='photo-file', accept='image/*', required)
+    h2 2. Write some stuff
+    input(type='text', name='text', class='text-input',
+          placeholder='Enter some text!', required)
+    input(type='hidden', name='photo', class='file-input')
+    input(type='hidden', name='fileType', class='file-type')
+    button(type='submit') Upload!

@@ -7,11 +7,41 @@ module.exports = function (app, nconf, isLoggedIn) {
   var uuid = require('uuid');
   var knox = require('knox');
 
-  app.get('/', function (req, res) {
-    res.render('index');
+  app.get('/', function (req, res, next) {
+    levelup(nconf.get('db'), {
+      createIfMissing: true,
+      keyEncoding: 'binary',
+      valueEncoding: 'json'
+    }, function (err, db) {
+      var memes = [];
+
+      if (db) {
+        db.createReadStream({
+          limit: 25
+        }).on('data', function (data) {
+          memes.push({
+            url: data.value.url,
+            encoded: encodeURIComponent(data.value.url)
+          });
+        }).on('error', function (err) {
+          res.status(500);
+          next(err);
+        }).on('end', function () {
+          res.render('index', { memes: memes });
+          db.close();
+        });
+      } else {
+        res.status(500);
+        next(err);
+      }
+    });
   });
 
-  app.post('/upload', isLoggedIn, function (req, res, next) {
+  app.get('/add', isLoggedIn, function (req, res, next) {
+    res.render('add');
+  });
+
+  app.post('/add', isLoggedIn, function (req, res, next) {
     var buffer = new Buffer(req.body.photo, 'base64');
 
     var s3 = knox.createClient({
@@ -38,24 +68,35 @@ module.exports = function (app, nconf, isLoggedIn) {
           valueEncoding: 'json'
         }, function (err, db) {
           if (db) {
+            var user;
+
+            if (req.session.loginType === 'appdotnet') {
+              user = req.session.passport.user.id;
+            } else {
+              user = req.session.email;
+            }
+
             db.put('meme_' + uid, {
-              url: s3.url(filename)
+              url: s3.url(filename),
+              loginType: req.session.loginType,
+              user: user
             }, function () {
               db.get('meme_' + uid, function (e, p) {
                 if (req.session.loginType === 'appdotnet') {
                   // use app.net's file api
-                  request.post({
+                  request({
+                    method: 'POST',
                     url: 'https://alpha-api.app.net/stream/0/files',
                     headers: {
                       'Authorization': 'Bearer ' + req.session.passport.user.access_token
                     },
-                    qs: {
-                      content: s3.url(filename)
-                    },
                     json: {
+                      content: buffer,
+                      public: true,
                       type: 'photo'
                     }
                   }, function (err, resp, body) {
+                    console.log(body)
                     res.redirect('/meme/' + encodeURIComponent(p.url));
                     db.close();
                   });
@@ -66,7 +107,8 @@ module.exports = function (app, nconf, isLoggedIn) {
               });
             });
           } else {
-            throw new Error('could not open database ', err);
+            res.status(500);
+            next(err);
           }
         });
       }

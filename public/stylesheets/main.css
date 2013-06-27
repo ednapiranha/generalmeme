@@ -68,6 +68,15 @@ h1 {
     margin-bottom: 20px;
 }
 
+h1 a:hover {
+    color: #111;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
 header {
     margin: 20px 0;
 }
@@ -94,7 +103,7 @@ header {
     position: absolute;
     right: 10px;
     text-decoration: none;
-    top: 0;
+    top: -15px;
 }
 
 form {
@@ -109,13 +118,63 @@ input {
     clear: both;
     display: block;
     margin: 15px 0;
+    padding: 5px;
     width: 100%;
 }
 
+button {
+    background-color: #4aa60d;
+    border: 0;
+    border-radius: 8px;
+    color: #e0ffb7;
+    font-size: 25px;
+    padding: 8px 15px;
+}
+
+h2 {
+    font-size: 30px;
+}
+
+input[type="file"] {
+    background-color: #eee;
+}
+
 input[type="text"] {
-    font-size: 15px;
+    font-size: 18px;
 }
 
 .hidden {
     display: none;
+}
+
+.upload {
+    background-color: #bedf24;
+    border-radius: 100px;
+    color: #4d5915;
+    display: inline-block;
+    font-size: 22px;
+    height: 100px;
+    line-height: 30px;
+    padding-top: 50px;
+    width: 150px;
+}
+
+.upload:hover {
+    background-color: #1a88dc;
+    color: #bfe3ff;
+}
+
+.memes {
+    display: block;
+    margin: 20px auto;
+    max-width: 930px;
+}
+
+.memes li {
+    float: left;
+    margin: 5px;
+}
+
+.memes img {
+   width: 300px;
 }

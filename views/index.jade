@@ -2,12 +2,13 @@ extend layout
 
 block content
   if session
-    form(method='post', action='/upload')
-      input(type='file', id='photo-file', accept='image/*', required)
-      input(type='text', name='text', class='text-input', required)
-      input(type='hidden', name='photo', class='file-input')
-      input(type='text', name='fileType', class='file-type')
-      button(type='submit') Upload!
+    a(href='/add', class='upload') Upload a new meme!
   else
     a(href='/auth/appdotnet', class='login') Sign in with App.net
     a(href='javascript:;', data-action='login', class='login') Sign in with Persona
+
+  ul.memes
+    for meme in memes
+      li
+        a(href='/meme/#{meme.encoded}')
+          img(src='#{meme.url}')
