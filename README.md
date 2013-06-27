@@ -6,7 +6,7 @@ A meme generator
 
 Install [leveldb](http://code.google.com/p/leveldb/downloads/list)
 
-> git clone git@github.com:ednapiranha/generalmeme.git
+> git clone https://github.com/ednapiranha/generalmeme.git
 
 > cd generalmeme
 
