@@ -11,7 +11,7 @@ define(['jquery', 'moment', 'memerator'],
   canvas.id = 'canvas';
   canvas.width = canvas.height = 500;
 
-  document.body.appendChild(canvas);
+  document.getElementById('canvas-block').appendChild(canvas);
 
   var meme = new Memerator();
 
