@@ -171,6 +171,11 @@ input[type="text"] {
     width: 500px;
 }
 
+.share {
+    left: 0;
+    position: absolute;
+}
+
 .upload {
     background-color: #bedf24;
     border-radius: 100px;

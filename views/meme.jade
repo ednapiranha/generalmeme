@@ -3,5 +3,11 @@ extend layout
 block content
   .image
     img(src='#{url}')
+    .share
+      a(href='https://twitter.com/share', class='twitter-share-button',
+        data-text='General meme of the second') Tweet
+      a(href='https://alpha.app.net/intent/post/?text=App.net%20social%20buttons%20are%20here',
+        class='adn-button', target='_blank', data-type='share', data-width='121',
+        data-height='20', data-text='General meme of the second') Share on App.net
     if isOwner
       a(href='/delete/#{key}', class='delete') Delete this meme
