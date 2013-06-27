@@ -17,7 +17,8 @@ module.exports = function (app, nconf, isLoggedIn) {
 
       if (db) {
         db.createReadStream({
-          limit: 30
+          limit: 30,
+          reverse: true
         }).on('data', function (data) {
           memes.push({
             url: data.value.url,
