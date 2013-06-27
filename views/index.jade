@@ -10,5 +10,5 @@ block content
   ul.memes
     for meme in memes
       li
-        a(href='/meme/#{meme.encoded}')
+        a(href='/meme/#{meme.key}')
           img(src='#{meme.url}')

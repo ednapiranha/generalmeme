@@ -1,4 +1,7 @@
 extend layout
 
 block content
-  img(src='#{url}')
+  .image
+    img(src='#{url}')
+    if isOwner
+      a(href='/delete/#{key}', class='delete') Delete this meme

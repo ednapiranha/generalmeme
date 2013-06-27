@@ -23,15 +23,13 @@ module.exports = function (app, nconf, isLoggedIn) {
           memes.push({
             key: data.key,
             url: data.value.url,
-            encoded: encodeURIComponent(data.value.url)
+            user: data.value.user,
+            loginType: data.value.loginType
           });
         }).on('error', function (err) {
           res.status(500);
           next(err);
         }).on('end', function () {
-          memes = memes.sort(function (a, b) {
-            return a.key - b.key;
-          });
           res.render('index', { memes: memes });
           db.close();
         });
@@ -49,7 +47,8 @@ module.exports = function (app, nconf, isLoggedIn) {
   app.post('/add', isLoggedIn, function (req, res, next) {
     var uid = uuid.v1();
     var buffer = new Buffer(req.body.photo, 'base64');
-    var filename = 'meme-' + (new Date().getTime()) + uid + '.' + req.body.fileType;
+    var keyName = (new Date().getTime()) + uid;
+    var filename = keyName + '.' + req.body.fileType;
     var user;
 
     var updateDb = function (url, callback) {
@@ -59,12 +58,13 @@ module.exports = function (app, nconf, isLoggedIn) {
         valueEncoding: 'json'
       }, function (err, db) {
         if (db) {
-          db.put('meme_' + uid, {
+          db.put(keyName, {
+            key: keyName,
             url: url,
             loginType: req.session.loginType,
             user: user
           }, function () {
-            db.get('meme_' + uid, function (e, p) {
+            db.get(keyName, function (e, p) {
               callback();
               db.close();
             });
@@ -97,7 +97,7 @@ module.exports = function (app, nconf, isLoggedIn) {
         multipart: true
       }, function (err, resp, body) {
         updateDb(body.data.url_permanent, function () {
-          res.redirect('/meme/' + encodeURIComponent(body.data.url_permanent));
+          res.redirect('/meme/' + keyName);
         });
       });
 
@@ -122,14 +122,64 @@ module.exports = function (app, nconf, isLoggedIn) {
           next(err);
         } else {
           updateDb(s3.url(filename), function () {
-            res.redirect('/meme/' + encodeURIComponent(s3.url(filename)));
+            res.redirect('/meme/' + keyName);
           });
         }
       });
     }
   });
 
-  app.get('/meme/:url', function (req, res, next) {
-    res.render('meme', { url: req.params.url });
+  app.get('/delete/:keyname', isLoggedIn, function (req, res, next) {
+    levelup(nconf.get('db'), {
+      createIfMissing: true,
+      keyEncoding: 'binary',
+      valueEncoding: 'json'
+    }, function (err, db) {
+      if (db) {
+        db.get(req.params.keyname, function (e, p) {
+          if (e) {
+            res.status(404);
+            next();
+          } else {
+            if (req.session && (req.session.email == p.user ||
+                req.session.passport.user.id == p.user)) {
+              db.del(req.params.keyname);
+            }
+            res.redirect('/');
+          }
+          db.close();
+        });
+      } else {
+        res.status(500);
+        next(err);
+      }
+    });
+  });
+
+  app.get('/meme/:keyname', function (req, res, next) {
+    levelup(nconf.get('db'), {
+      createIfMissing: true,
+      keyEncoding: 'binary',
+      valueEncoding: 'json'
+    }, function (err, db) {
+      if (db) {
+        db.get(req.params.keyname, function (e, p) {
+          if (e) {
+            res.status(404);
+            next();
+          } else {
+            res.render('meme', {
+              key: p.key,
+              url: p.url,
+              isOwner: req.session && (req.session.email == p.user || req.session.passport.user.id == p.user)
+            });
+          }
+          db.close();
+        });
+      } else {
+        res.status(500);
+        next(err);
+      }
+    });
   });
 };
