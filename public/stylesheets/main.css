@@ -54,9 +54,27 @@ table {
     font-style: normal;
 }
 
-body {
-    font-family: 'Bebas', sans-serif;
+@-webkit-keyframes pulse {
+    0% { background-color: #fff; }
+    50% { background-color: #eee; }
+    100% { background-color: #fff; }
+}
+
+@keyframes pulse {
+    0% { background-color: #fff; }
+    50% { background-color: #eee; }
+    100% { background-color: #fff; }
+}
+
+html, body {
+    height: 100%;
     position: relative;
+}
+
+body {
+    -webkit-animation: pulse 15s infinite ease-in;
+    animation: pulse 15s infinite ease-in;
+    font-family: 'Bebas', sans-serif;
     text-align: center;
     word-spacing: 2px;
 }
@@ -78,7 +96,7 @@ a {
 }
 
 header {
-    margin: 20px 0;
+    padding: 20px 0;
 }
 
 .login {
@@ -92,18 +110,13 @@ header {
     white-space: nowrap;
 }
 
-.login:hover, .logout:hover {
-    font-size: 30px;
-    transition: 0.5s ease-in-out;
-}
-
 .logout {
     color: #222;
     font-size: 20px;
     position: absolute;
     right: 10px;
     text-decoration: none;
-    top: -15px;
+    top: 5px;
 }
 
 form {
@@ -112,6 +125,13 @@ form {
     padding: 20px 0;
     text-align: center;
     width: 500px;
+}
+
+#wrapper {
+    background-color: #fff;
+    height: 100%;
+    margin: 0 auto;
+    max-width: 970px;
 }
 
 input {
@@ -165,14 +185,18 @@ input[type="text"] {
 }
 
 .memes {
-    display: block;
     margin: 20px auto;
     max-width: 930px;
+    min-width: 320px;
+    text-align: center;
 }
 
 .memes li {
     float: left;
+    height: 300px;
     margin: 5px;
+    overflow: hidden;
+    width: 300px;
 }
 
 .memes img {
