@@ -45,7 +45,7 @@ module.exports = function (app, nconf, isLoggedIn) {
   app.post('/add', isLoggedIn, function (req, res, next) {
     var uid = uuid.v1();
     var buffer = new Buffer(req.body.photo, 'base64');
-    var filename = 'meme-' + uid + '.' + req.body.fileType;
+    var filename = 'meme-' + (new Date().getTime()) + uid + '.' + req.body.fileType;
     var user;
 
     var updateDb = function (url, callback) {
