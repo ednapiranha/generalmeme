@@ -171,7 +171,7 @@ module.exports = function (app, nconf, isLoggedIn) {
             res.render('meme', {
               key: p.key,
               url: p.url,
-              isOwner: req.session.authenticated && (req.session.email == p.user || (req.session.passport && req.session.passport.user.id == p.user))
+              isOwner: req.session.authenticated && (req.session.email == p.user || (req.session.passport && req.session.passport.user && req.session.passport.user.id == p.user))
             });
           }
           db.close();
