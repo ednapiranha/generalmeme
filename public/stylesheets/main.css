@@ -172,6 +172,7 @@ input[type="text"] {
 }
 
 .share {
+    bottom: -20px;
     left: 0;
     position: absolute;
 }
