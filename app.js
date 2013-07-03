@@ -24,7 +24,7 @@ passport.use(new AppDotNetStrategy({
     clientSecret: nconf.get('appnet_consumer_secret'),
     scope: 'files',
     callbackURL: nconf.get('domain') + ':' + nconf.get('authPort') + '/auth/appdotnet/callback',
-    authorizationUrl: 'https://alpha.app.net/oauth/authenticate?new_onboarding=1'
+    authorizationURL: 'https://alpha.app.net/oauth/authenticate?new_onboarding=1'
   },
   function (accessToken, refreshToken, profile, done) {
     process.nextTick(function (err) {
